@@ -2,8 +2,13 @@ package com.shuman.stonks.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ResolvableType;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -16,32 +21,43 @@ import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class MainController {
     @Autowired
     private ClientRegistrationRepository clientRegistrationRepository;
 
-    private static String authorizationRequestBaseUri = "oauth2/authorization";
+    @Autowired
+    private OAuth2AuthorizedClientService clientService;
+
     private Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
 
     @PostConstruct
     public void init() {
-        Iterable<ClientRegistration> clientRegistrations = null;
-        ResolvableType type = ResolvableType.forInstance(clientRegistrationRepository)
-            .as(Iterable.class);
-        if (type != ResolvableType.NONE &&
-            ClientRegistration.class.isAssignableFrom(type.resolveGenerics()[0])) {
-            clientRegistrations = (Iterable<ClientRegistration>) clientRegistrationRepository;
-        }
-
-        clientRegistrations.forEach(registration ->
+        Optional.ofNullable(clientRegistrationRepository.findByRegistrationId("twitch"))
+            .map(registration ->
             oauth2AuthenticationUrls.put(registration.getClientName(),
-                authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
+                "oauth2/authorization/" + registration.getRegistrationId()));
     }
 
     @GetMapping("/")
     public String index(Model model) {
+        Authentication authentication =
+            SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        OAuth2AuthenticationToken oauthToken =
+            (OAuth2AuthenticationToken) authentication;
+
+        OAuth2AuthorizedClient client =
+            clientService.loadAuthorizedClient(
+                oauthToken.getAuthorizedClientRegistrationId(),
+                oauthToken.getName());
+
+        String accessToken = client.getAccessToken().getTokenValue();
+
         model.addAttribute("eventName", "FIFA 2018");
         return "index";
     }

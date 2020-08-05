@@ -1,4 +1,4 @@
-package com.shuman.stonks;
+package com.shuman.stonks.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.FormHttpMessageConverter;
@@ -9,8 +9,6 @@ import org.springframework.security.oauth2.client.endpoint.DefaultAuthorizationC
 import org.springframework.security.oauth2.client.endpoint.OAuth2AccessTokenResponseClient;
 import org.springframework.security.oauth2.client.endpoint.OAuth2AuthorizationCodeGrantRequest;
 import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -23,7 +21,7 @@ public class Security extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            .antMatchers("/error", "/oauth_login").permitAll()
+            .antMatchers("/error", "/oauth_login", "/h2-console**").permitAll()
             .anyRequest().authenticated()
             .and()
             .oauth2Client(oauth2 -> oauth2
@@ -36,6 +34,8 @@ public class Security extends WebSecurityConfigurerAdapter {
                     tokenEndpoint.accessTokenResponseClient(this.accessTokenResponseClient())
                 ).loginPage("/oauth_login")
             );
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
     }
 
     public OAuth2AccessTokenResponseClient<OAuth2AuthorizationCodeGrantRequest> accessTokenResponseClient() {
