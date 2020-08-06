@@ -3,6 +3,7 @@ package com.shuman.stonks.twitch;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.shuman.stonks.model.User;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.net.URI;
@@ -36,6 +37,7 @@ public class TwitchApi {
             .flatMap(response -> response.bodyToMono(JsonNode.class))
             .map(body -> body.path("data").path(0))
             .map(clip -> clip.path("edit_url").asText())
+            .filter(str -> !StringUtils.isEmpty(str))
             .map(URI::create)
             .block();
     }

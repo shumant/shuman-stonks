@@ -1,3 +1,4 @@
+/*
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
@@ -18,3 +19,4 @@ CREATE TABLE auth (
   refresh_Token VARCHAR(128)
 );
 
+*/
