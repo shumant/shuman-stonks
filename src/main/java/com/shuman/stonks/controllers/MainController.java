@@ -75,7 +75,7 @@ public class MainController {
     @GetMapping("/oauth_login")
     public String getLoginPage(Model model) {
         model.addAttribute("urls", oauth2AuthenticationUrls);
-        return "oauth_login.html";
+        return "oauth_login";
     }
 
     @GetMapping("/authorities")

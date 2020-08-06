@@ -17,7 +17,7 @@
     <iframe frameborder="0"
             scrolling="no"
             id="chat_embed"
-            src="https://www.twitch.tv/embed/evelone192/chat?parent=localhost"
+            src="https://www.twitch.tv/embed/${streamer}/chat?parent=localhost"
             height="500"
             width="350">
     </iframe>
@@ -29,7 +29,7 @@
   var options = {
     width: 800,
     height: 600,
-    channel: "evelone192"
+    channel: "${streamer}"
   };
   var player = new Twitch.Player("<player div ID>", options);
   player.setVolume(0.5);

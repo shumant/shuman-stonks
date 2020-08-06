@@ -3,6 +3,7 @@ logging:
     org.springframework.web.reactive.function.client.ExchangeFunctions: TRACE
     reactor.netty.http.client.HttpClient: DEBUG
 spring:
+  freemarker.suffix: .html
   h2.console.enabled: true
   datasource:
     url: jdbc:h2:mem:testdb
