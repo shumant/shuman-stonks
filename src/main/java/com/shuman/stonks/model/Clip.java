@@ -9,8 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.UUID;
 
-import static java.util.UUID.randomUUID;
-
 @Builder
 @Data
 @Table(name = "clips")
@@ -19,16 +17,11 @@ import static java.util.UUID.randomUUID;
 public class Clip {
 
     @Id
-    private UUID id;
+    private String id;
     private UUID creatorId;
-    private UUID streamerId;
+    private String streamerLogin;
     private long viewCount;
 
     public Clip() {
-    }
-
-    public Clip withRandomId() {
-        this.id = randomUUID();
-        return this;
     }
 }
