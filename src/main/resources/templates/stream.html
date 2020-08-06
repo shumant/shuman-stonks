@@ -12,19 +12,29 @@
 </head>
 <body class="text-center">
 <div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <h1 class="h3 mb-3 font-weight-normal">What's your favorite streamer?</h1>
-            <form class="form-signin" action="/stream" method="post">
-                <label for="streamer" class="sr-only">Name:</label><br>
-                <input type="text" id="streamer" name="streamer" class="form-control" placeholder="Name"><br>
-                <input type="submit" value="Open stream" class="btn btn-lg btn-primary btn-block">
-            </form>
-        </div>
-    </div>
+
+    <div id="<player div ID>"></div>
+    <iframe frameborder="0"
+            scrolling="no"
+            id="chat_embed"
+            src="https://www.twitch.tv/embed/evelone192/chat?parent=localhost"
+            height="500"
+            width="350">
+    </iframe>
 </div>
 
 <!-- Optional JavaScript -->
+<script src="https://player.twitch.tv/js/embed/v1.js"></script>
+<script type="text/javascript">
+  var options = {
+    width: 800,
+    height: 600,
+    channel: "evelone192"
+  };
+  var player = new Twitch.Player("<player div ID>", options);
+  player.setVolume(0.5);
+
+</script>
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

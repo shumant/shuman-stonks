@@ -28,3 +28,6 @@ spring:
             scope:
               - "user:read:email"
               - "user:read:broadcast"
+server:
+  servlet:
+    session.timeout: 7d
