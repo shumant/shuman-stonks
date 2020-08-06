@@ -12,8 +12,15 @@
 </head>
 <body class="text-center">
 <div class="container">
-
     <div id="<player div ID>"></div>
+    <div class=row>
+        <div class="col-md-4 d-flex justify-content-center">
+            <form class="form-signin" action="/create-clip" method="get" target="_blank">
+                <input type="hidden" id="streamer" name="streamer" class="form-control" value="${streamer}"><br>
+                <input type="submit" value="Create clip" class="btn btn-lg btn-primary btn-block">
+            </form>
+        </div>
+    </div>
     <iframe frameborder="0"
             scrolling="no"
             id="chat_embed"
@@ -33,6 +40,7 @@
   };
   var player = new Twitch.Player("<player div ID>", options);
   player.setVolume(0.5);
+
 
 </script>
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->

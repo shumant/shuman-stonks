@@ -28,7 +28,7 @@ spring:
             authorization-grant-type: authorization_code
             scope:
               - "user:read:email"
-              - "user:read:broadcast"
+              - "clips:edit"
 server:
   servlet:
     session.timeout: 7d

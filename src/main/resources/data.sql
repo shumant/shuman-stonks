@@ -14,6 +14,7 @@ CREATE TABLE auth (
   id UUID  PRIMARY KEY,
   user_id UUID NOT NULL REFERENCES users(id),
   scopes VARCHAR(128) NOT NULL,
-  token VARCHAR(64)
+  access_token VARCHAR(128),
+  refresh_Token VARCHAR(128)
 );
 
