@@ -3,6 +3,8 @@ package com.shuman.stonks.cron;
 import com.shuman.stonks.model.Clip;
 import com.shuman.stonks.repository.ClipsRepository;
 import com.shuman.stonks.twitch.TwitchApi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.List;
@@ -19,6 +21,8 @@ public class ViewCountUpdater {
     private final ClipsRepository clipsRepository;
     private final TwitchApi twitchApi;
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     public ViewCountUpdater(ClipsRepository clipsRepository, TwitchApi twitchApi) {
         this.clipsRepository = clipsRepository;
         this.twitchApi = twitchApi;
@@ -27,6 +31,7 @@ public class ViewCountUpdater {
     //    @Scheduled(cron = "0 0 0 * * ?")
     @Scheduled(fixedDelay = 1000)
     public void updateViewCount() {
+        logger.info("Updating clips view count");
         final var clipIds = stream(clipsRepository.findAll().spliterator(), false)
             .map(Clip::getId)
             .collect(toList());
