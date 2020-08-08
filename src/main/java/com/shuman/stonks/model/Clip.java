@@ -24,4 +24,9 @@ public class Clip {
 
     public Clip() {
     }
+
+    public Clip withViewCount(long viewCount) {
+        this.viewCount = viewCount;
+        return this;
+    }
 }

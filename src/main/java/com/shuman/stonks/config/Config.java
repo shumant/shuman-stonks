@@ -3,6 +3,7 @@ package com.shuman.stonks.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
@@ -18,6 +19,7 @@ import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
 @Component
+@EnableScheduling
 public class Config {
     @Value("${spring.security.oauth2.client.registration.twitch.client-id}")
     private String clientId;

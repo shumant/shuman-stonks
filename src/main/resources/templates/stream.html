@@ -12,7 +12,20 @@
 </head>
 <body class="text-center">
 <div class="container">
-    <div id="<player div ID>"></div>
+    <div class="row">
+        <div class="col-md-9">
+            <div id="<player div ID>"></div>
+        </div>
+        <div class="col-md-3">
+            <iframe frameborder="0"
+                    scrolling="no"
+                    id="chat_embed"
+                    src="https://www.twitch.tv/embed/${streamer}/chat?parent=localhost"
+                    height="500"
+                    width="350">
+            </iframe>
+        </div>
+    </div>
     <div class=row>
         <div class="col-md-4 d-flex justify-content-center">
             <form class="form-signin" action="/create-clip" method="get" target="_blank">
@@ -21,13 +34,29 @@
             </form>
         </div>
     </div>
-    <iframe frameborder="0"
-            scrolling="no"
-            id="chat_embed"
-            src="https://www.twitch.tv/embed/${streamer}/chat?parent=localhost"
-            height="500"
-            width="350">
-    </iframe>
+    <div class="row">
+        <h2>Clips:</h2>
+        <#if clips?has_content>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Link</th>
+            </tr>
+            </thead>
+            <tbody>
+            <#list clips as clip>
+            <tr>
+                <td>${clip.title}</td>
+                <td><a target="_blank" href="${clip.url}">Open</a></td>
+            </tr>
+            </#list>
+            </tbody>
+        </table>
+        <#else>
+        <p>No clips for current streamer. If you have created one, please reload page</p>
+        </#if>
+    </div>
 </div>
 
 <!-- Optional JavaScript -->
@@ -40,6 +69,10 @@
   };
   var player = new Twitch.Player("<player div ID>", options);
   player.setVolume(0.5);
+
+
+
+
 
 
 </script>
