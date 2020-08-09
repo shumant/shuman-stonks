@@ -3,12 +3,14 @@ logging:
     org.springframework.web.reactive.function.client.ExchangeFunctions: TRACE
     reactor.netty.http.client.HttpClient: DEBUG
 spring:
+  jpa.hibernate.ddl-auto: update
   freemarker.suffix: .html
   h2.console.enabled: true
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password: password
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://ec2-35-173-94-156.compute-1.amazonaws.com:5432/d896fdb9bj8p8n
+    username: kiksbahwhtejqj
+    password: 42b0fb232319fbb93ec02bd73a49f792611b7582dd41afc869a931a2a5011e5b
   security:
     oauth2:
       client:

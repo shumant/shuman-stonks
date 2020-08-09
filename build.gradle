@@ -28,7 +28,7 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-devtools"
 	implementation group: 'com.google.guava', name: 'guava', version: '29.0-jre'
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
