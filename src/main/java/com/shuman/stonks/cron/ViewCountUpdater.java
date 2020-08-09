@@ -31,7 +31,7 @@ public class ViewCountUpdater {
     }
 
     //    @Scheduled(cron = "0 0 0 * * ?")
-    @Scheduled(fixedDelay = 7000)
+    @Scheduled(fixedDelay = 1000)
     public void updateViewCount() {
         logger.info("Updating clips view count");
         final var clipIds = stream(clipsRepository.findAll().spliterator(), false)

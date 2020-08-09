@@ -1,5 +1,6 @@
 package com.shuman.stonks.config;
 
+import com.shuman.stonks.twitch.TwitchApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -24,6 +25,9 @@ public class Config {
     @Value("${spring.security.oauth2.client.registration.twitch.client-id}")
     private String clientId;
 
+    @Value("${app-access-token}")
+    private String appAccessToken;
+
     private final static String TWITCH_BASE_URI = "https://api.twitch.tv/helix/";
 
     @Bean
@@ -44,8 +48,7 @@ public class Config {
         return authorizedClientManager;
     }
 
-    @Bean
-    public WebClient webClient(OAuth2AuthorizedClientManager authorizedClientManager) {
+    private WebClient twitchWebClient(OAuth2AuthorizedClientManager authorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
             new ServletOAuth2AuthorizedClientExchangeFilterFunction(authorizedClientManager);
         oauth2Client.setDefaultClientRegistrationId("twitch");
@@ -60,5 +63,22 @@ public class Config {
                 .header("Client-ID", clientId)
                 .build())))
             .build();
+    }
+
+    @Bean
+    public TwitchApi twitchApi(OAuth2AuthorizedClientManager authorizedClientManager) {
+        return new TwitchApi(
+            twitchWebClient(authorizedClientManager),
+            WebClient.builder()
+                .baseUrl(TWITCH_BASE_URI)
+                .codecs(configurer -> configurer.defaultCodecs().enableLoggingRequestDetails(true))
+                .clientConnector(new ReactorClientHttpConnector(
+                    HttpClient.create()
+                        .wiretap(true)))
+                .filter(ExchangeFilterFunction.ofRequestProcessor(clientRequest -> Mono.just(ClientRequest.from(clientRequest)
+                    .header("Client-ID", clientId)
+                    .build())))
+                .build(),
+            appAccessToken);
     }
 }

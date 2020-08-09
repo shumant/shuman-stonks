@@ -2,8 +2,8 @@ package com.shuman.stonks.twitch;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.shuman.stonks.model.User;
-import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.List;
@@ -16,50 +16,60 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 import static org.springframework.util.StringUtils.isEmpty;
 
-@Service
 public class TwitchApi {
 
-    private final WebClient webClient;
+    private final WebClient authorizedClient;
+    private final WebClient anonymousClient;
+    private final String appAccessToken;
 
-    public TwitchApi(WebClient webClient) {
-        this.webClient = webClient;
+    public TwitchApi(WebClient authorizedClient, WebClient anonymousClient, String appAccessToken) {
+        this.authorizedClient = authorizedClient;
+        this.anonymousClient = anonymousClient;
+        this.appAccessToken = appAccessToken;
     }
 
     public Optional<String> userIdFromLogin(String login) {
-        return webClient.get()
+        return authorizedClient.get()
             .uri(uriBuilder -> uriBuilder.path("users").queryParam("login", login).build())
             .retrieve()
             .bodyToMono(JsonNode.class)
             .map(body -> body.path("data").path(0))
             .map(user -> Optional.ofNullable(user.path("id").asText()).filter(str -> !isEmpty(str)))
-            .onErrorReturn(empty())
+            .onErrorResume(error -> {
+                error.printStackTrace();
+                return Mono.just(empty());
+            })
             .block();
     }
 
     public Optional<ClipEditResponse> createClip(String broadcasterId) {
-        return webClient.post()
+        return authorizedClient.post()
             .uri(uriBuilder -> uriBuilder.path("clips").queryParam("broadcaster_id", broadcasterId).build())
             .retrieve()
             .bodyToMono(JsonNode.class)
             .map(body -> body.path("data").path(0))
             .filter(clip -> !clip.isMissingNode())
             .map(clip -> Optional.of(new ClipEditResponse(clip.path("id").asText(), URI.create(clip.path("edit_url").asText()))))
-            .onErrorReturn(empty())
+            .onErrorResume(error -> {
+                error.printStackTrace();
+                return Mono.just(empty());
+            })
             .block();
     }
 
     public List<ClipResponse> clips(List<String> clipIds) {
-        return webClient.get()
+        return anonymousClient.get()
             .uri(uriBuilder -> uriBuilder.path("clips").queryParam("id", clipIds).build())
+            .header("Authorization", "Bearer " + appAccessToken)
             .retrieve()
             .bodyToMono(JsonNode.class)
-            .map(body -> {
-                int f = 5;
-                return body.path("data");
-            })
+            .map(body -> body.path("data"))
             .filter(JsonNode::isArray)
             .map(this::fromJsonArray)
-            .onErrorReturn(emptyList())
+            .onErrorResume(error -> {
+                error.printStackTrace();
+                return Mono.just(emptyList());
+            })
             .block();
 
     }
@@ -74,7 +84,7 @@ public class TwitchApi {
     }
 
     public User getCurrentUser(String accessToken) {
-        return webClient.get().uri("users")
+        return anonymousClient.get().uri("users")
             .header("Authorization", "Bearer " + accessToken)
             .retrieve()
             .bodyToMono(JsonNode.class)
