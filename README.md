@@ -1,25 +1,22 @@
-# Getting Started
+# Twitch clips test task
+Architecture:
+* Java 11
+* Spring Boot
+* REST API
+* OAuth with New Twitch API
+* PosgreSQL DB provided by Heroku  
+* For the sake of simplicity, FE is done without any fancy JS frameworks. Only HTML and Java template engine Freemarker
+* App is deployed to Heroku at: https://shuman-stonks.herokuapp.com/ 
 
-### Reference Documentation
-For further reference, please consider the following sections:
+# Constrains
+- Design is ugly
+- Spent way more time than 4 hours, didn't have time to create tests, which is unacceptable for PROD app.
+- DB and Twitch secrets are exposed in application.yml that is available in a public GitHub repo. Should encrypt secrets and/or provide them as startup variables.
+- Twitch claims one can get clips from API without OAuth token, but in reality it's forbidden. I had to get an App Token (do not confuse with user Access Token) and save it to application.yaml. It will expire in 60 days.
 
-* [Official Gradle documentation](https://docs.gradle.org)
-* [Spring Boot Gradle Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.3.2.RELEASE/gradle-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.3.2.RELEASE/gradle-plugin/reference/html/#build-image)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/2.3.2.RELEASE/reference/htmlsingle/#boot-features-developing-web-applications)
-* [Spring Security](https://docs.spring.io/spring-boot/docs/2.3.2.RELEASE/reference/htmlsingle/#boot-features-security)
-* [OAuth2 Client](https://docs.spring.io/spring-boot/docs/2.3.2.RELEASE/reference/htmlsingle/#boot-features-security-oauth2-client)
-* [JOOQ Access Layer](https://docs.spring.io/spring-boot/docs/2.3.2.RELEASE/reference/htmlsingle/#boot-features-jooq)
+# AWS Architecture
+#### Small app (100 reqs/day)
+![](stonks-small.png)
 
-### Further consideration
-- In a real-world application, you'll likely use a build process using a tool such as Webpack and Babel transpiler, instead of using in-browser Babel.
-  
-
-The following guides illustrate how to use some features concretely:
-
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
-* [Securing a Web Application](https://spring.io/guides/gs/securing-web/)
-* [Spring Boot and OAuth2](https://spring.io/guides/tutorials/spring-boot-oauth2/)
-* [Authenticating a User with LDAP](https://spring.io/guides/gs/authenticating-ldap/)
+#### Large app (900M reqs/day)
+![](stonks-large.png)

@@ -11,7 +11,6 @@ import java.util.UUID;
 
 @Repository
 public interface UsersRepository extends CrudRepository<User, UUID> {
-    // @Modifying if query is modifying
     @Query(value = "select * from users u where u.oauth_id = :id", nativeQuery = true)
     Optional<User> findByOauthId(@Param("id") String id);
 }
