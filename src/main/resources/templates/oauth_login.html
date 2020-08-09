@@ -1,6 +1,21 @@
-<h3>Login with:</h3>
-<#list urls as key, value>
-  <p>
-    <a href="${value}">${key}</a>
-  </p>
-</#list>
+<!doctype html>
+<html lang="en">
+<head>
+    <#include "/head.html">
+</head>
+<body class="text-center">
+<div class="container">
+    <div class="row">
+        <h3>Login with:</h3>
+        <div class="row">
+            <#list urls as key, value>
+            <p>
+                <a href="${value}">${key}</a>
+            </p>
+        </#list>
+    </div>
+</div>
+</div>
+<#include "/script.html">
+</body>
+</html>

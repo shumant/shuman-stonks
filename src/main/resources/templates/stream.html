@@ -1,16 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"
-          integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX" crossorigin="anonymous">
-
+    <#include "/head.html">
 </head>
 <body class="text-center">
+<#include "/navbar.html">
 <div class="container">
     <div class="row">
         <div class="col-md-9">
@@ -56,10 +50,11 @@
             </tbody>
         </table>
         <#else>
-        <p></p>
-        <p>No clips for current streamer. If you have created one, please reload page</p>
-        </#if>
-    </div>
+        <div class="row">
+            <p></p>
+            <p>No clips for current streamer. If you have created one, please reload page</p>
+        </div>
+    </#if>
 </div>
 
 <!-- Optional JavaScript -->
@@ -72,12 +67,6 @@
   };
   var player = new Twitch.Player("<player div ID>", options);
   player.setVolume(0.5);
-
-
-
-
-
-
 </script>
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

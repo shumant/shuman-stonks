@@ -1,6 +1,7 @@
 package com.shuman.stonks.controllers;
 
 import com.shuman.stonks.model.Clip;
+import com.shuman.stonks.model.User;
 import com.shuman.stonks.repository.ClipsRepository;
 import com.shuman.stonks.repository.UsersRepository;
 import com.shuman.stonks.twitch.ClipEditResponse;
@@ -65,6 +66,22 @@ public class MainController {
         return "stream";
     }
 
+    @GetMapping(path = "/stat")
+    public String stat(Model model) {
+        final var userId = currentUserOauthId().flatMap(usersRepository::findByOauthId).map(User::getId);
+
+        final var totalCount = userId
+            .map(clipsRepository::totalViewsForClipsCreatedBy)
+            .orElse(0L);
+        model.addAttribute("totalCount", totalCount);
+
+        userId.map(clipsRepository::viewsPerStreamerForClipsCreatedBy)
+            .filter(map -> !map.isEmpty())
+            .ifPresent(streamers -> model.addAttribute("streamers", streamers));
+
+        return "stat";
+    }
+
     private List<String> clipsIdsForStreamer(String streamer) {
         return currentUserOauthId()
             .flatMap(usersRepository::findByOauthId)
@@ -96,9 +113,9 @@ public class MainController {
                 .build()));
     }
 
-    @GetMapping("/")
+    @GetMapping(path = {"/", "/open_stream"})
     public String index(Model model) {
-        return "index";
+        return "open_stream";
     }
 
     @GetMapping("/oauth_login")

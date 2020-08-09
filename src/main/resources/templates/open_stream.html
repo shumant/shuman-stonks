@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <#include "/head.html">
+</head>
+<body class="text-center">
+<#include "/navbar.html">
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h1 class="h3 mb-3 font-weight-normal">What's your favorite streamer?</h1>
+            <form class="form-signin" action="/stream" method="post">
+                <label for="streamer" class="sr-only">Name:</label><br>
+                <input type="text" id="streamer" name="streamer" class="form-control" placeholder="Name"><br>
+                <input type="submit" value="Open stream" class="btn btn-lg btn-primary btn-block">
+            </form>
+        </div>
+    </div>
+</div>
+<#include "/script.html">
+</body>
+</html>

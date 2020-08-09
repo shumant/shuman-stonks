@@ -6,6 +6,7 @@ import com.shuman.stonks.twitch.TwitchApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.StreamSupport.stream;
 
+@Service
 public class ViewCountUpdater {
     private final int TWITCH_CLIP_LIMIT = 100;
 
@@ -29,7 +31,7 @@ public class ViewCountUpdater {
     }
 
     //    @Scheduled(cron = "0 0 0 * * ?")
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 7000)
     public void updateViewCount() {
         logger.info("Updating clips view count");
         final var clipIds = stream(clipsRepository.findAll().spliterator(), false)
