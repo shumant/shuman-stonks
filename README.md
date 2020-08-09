@@ -18,5 +18,12 @@ Architecture:
 #### Small app (100 reqs/day)
 ![](stonks-small.png)
 
+#### Bottlenecks
+- Single DB instance
+- Single Availability Zone
+- Single app instance
+- No Load-balancing
+
 #### Large app (900M reqs/day)
 ![](stonks-large.png)
+
